@@ -1,7 +1,8 @@
 // screens/AddUserScreen.js
 
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
+import { Picker } from '@react-native-picker/picker'
 import firebase from '../firebase/firebaseDB'
 
 class AddUserScreen extends Component {
