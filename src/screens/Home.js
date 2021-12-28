@@ -6,12 +6,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AddUserScreen from './AddUserScreen';
 import UserScreen from './UserScreen';
 import UserDetailScreen from './UserDetailScreen';
+import Logout from './Logout';
 
 const Stack = createStackNavigator();
 
-function MyStack() {
-  return (
-    <Stack.Navigator
+export default function Home() {
+	return (
+      <Stack.Navigator
       screenOptions={{
           headerStyle: {
             backgroundColor: '#621FF7',
@@ -22,6 +23,11 @@ function MyStack() {
           },
         }}
       >
+      <Stack.Screen 
+        name="Logout" 
+        component={Logout} 
+        options={{ title: 'Logout' }}
+      />
       <Stack.Screen 
         name="AddUserScreen" 
         component={AddUserScreen} 
@@ -38,13 +44,5 @@ function MyStack() {
        options={{ title: 'User Detail' }}
       />
     </Stack.Navigator>
-  );
-}
-
-export default function Home() {
-	return (
-      <NavigationContainer independent={true}>
-        <MyStack />
-      </NavigationContainer>
     );
 }

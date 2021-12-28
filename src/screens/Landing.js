@@ -1,40 +1,32 @@
-import React, { Component } from 'react';
-import { StyleSheet, ScrollView, Button, View } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements'
-import firebase from '../firebase/firebaseDB'
+import React from 'react';
 
-class Landing extends Component {
+import { createStackNavigator } from '@react-navigation/stack';
 
-	constructor() {
-		super();
+import Login from './Login';
+import LandingComponent from '../components/LandingComponent';
+import Signup from './Signup';
 
-	}
+const Stack = createStackNavigator();
 
 
+export default function Landing() {
+  return (
+    <Stack.Navigator
+      initialRouteName="LandingComponent"
+    >
+      <Stack.Screen
+        name="LandingComponent"
+        component={LandingComponent}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={Signup}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+      />
 
-	render() {
-		return (
-			<View style={styles.container}>
-				 <Button
-            title="Sign up"
-            onPress={ ()=>{this.props.navigation.navigate('Signup');} }
-            color="#E37399"
-          />
-          <Button
-            title="Log in"
-            onPress={ ()=>{this.props.navigation.navigate('Login');} }
-            color="#E37399"
-          />
-			</View>
-		);
-	}
+    </Stack.Navigator>
+    )
 }
-
-const styles = StyleSheet.create({
-  container: {
-   flex: 1,
-  }
-})
-
-
-export default Landing;
