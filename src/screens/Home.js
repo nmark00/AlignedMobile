@@ -43,7 +43,7 @@ function MyStack() {
 
 export default function Home() {
 	return (
-      <NavigationContainer>
+      <NavigationContainer independent={true}>
         <MyStack />
       </NavigationContainer>
     );

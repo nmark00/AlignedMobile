@@ -23,6 +23,15 @@ export default styles = {
     text: {
         fontSize: 25,
     },
+    preloader: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
     
     fullwidthHeight: {
         width: width,

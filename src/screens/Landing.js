@@ -17,7 +17,7 @@ class Landing extends Component {
 			<View style={styles.container}>
 				 <Button
             title="Sign up"
-            onPress={ ()=>{this.props.navigation.navigate('Signin');} }
+            onPress={ ()=>{this.props.navigation.navigate('Signup');} }
             color="#E37399"
           />
           <Button
