@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import LoginView from './LoginView.js';
-import firebase from 'react-native-firebase';
-import { Text, Button, Card } from 'native-base';
-import { View, ActivityIndicator } from 'react-native';
+import Login from '../screens/Login';
+// import firebase from 'react-native-firebase';
+import firebase from '../firebase/firebaseDB'
+// import { Text, Button, Card } from 'native-base';
+import { View, ActivityIndicator, Text, Button } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { withNavigation } from 'react-navigation';
-import SpinnerComponent from '../Loader/LoaderView.js';
-import styles from './Loginstyles';
+// import { withNavigation } from 'react-navigation';
+// import SpinnerComponent from '../Loader/LoaderView.js';
+import styles from '../styles/Loginstyles';
 
 class LoginContainer extends Component {
     constructor(props) {
@@ -26,6 +27,10 @@ class LoginContainer extends Component {
         };
     }
 
+    // FUNCTION FUNCTION FUNCTION
+    // This gets called last. It'll check if auth() is changed
+    // If so, the auth object is set to a user, and user is set to
+    // our state's user.
     componentDidMount() {
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -37,7 +42,7 @@ class LoginContainer extends Component {
                     message: '',
                     codeInput: '',
                     phoneNumber: '+91',
-                    confirmResult: null,
+                    confirmResult: null, // obj used to confirm OPT
                 });
                 alert('no user exist');
 
@@ -48,6 +53,10 @@ class LoginContainer extends Component {
         if (this.unsubscribe) this.unsubscribe();
     }
 
+    // FUNCTION FUNCTION FUNCTION
+    // After you enter your number, it'll set confirmResult to 
+    // store the object associated w/ your number. Use this 
+    // object to confirm the OPT code later
     signIn = async () => {
         const { phoneNumber } = this.state;
         this.setState({ message: 'Sending code ...' });
@@ -59,6 +68,11 @@ class LoginContainer extends Component {
             .catch(error => this.setState({ message: `Sign In With Phone Number Error: ${error.message}` }));
     };
 
+    // FUNCTION FUNCTION FUNCTION
+    // Takes the codeInput which you entered and confirmResult.
+    // After you call signInWithPhoneNumber, it sets confirmResult
+    // to a confirm object which can confirm your OPT code
+    // Then this will create a new user
     confirmCode = () => {
         const { codeInput, confirmResult } = this.state;
 
@@ -83,8 +97,10 @@ class LoginContainer extends Component {
     };
 
 
-
+    // FUNCTION FUNCTION FUNCTION
     createUserDatabase = () => {
+        // Takes the data from the current state and
+        // creates a new user with that data
         const { userName, phoneNo, userId } = this.state
         the_uid = userId
         const data = {
@@ -99,6 +115,9 @@ class LoginContainer extends Component {
     }
 
 
+    // COMPONENT COMPONENT COMPONENT
+    // This ALWAYS shows up on LoginViews.
+    // It tells the user what's going on
     renderMessage = () => {
         const { message } = this.state;
         if (!message.length) return null;
@@ -109,6 +128,9 @@ class LoginContainer extends Component {
         );
     }
 
+    // COMPONENT COMPONENT COMPONENT
+    // This function renders text inputs for your username 
+    // and OPT code. It has a button when pressed checks the code
     renderVerificationCodeInput = () => {
         const { codeInput, userName } = this.state;
         return (
@@ -151,17 +173,26 @@ class LoginContainer extends Component {
         );
     }
 
+    // FUNCTION FUNCTION FUNCTION
+    // When LoginView enters a number, it automatically calls 
+    //this function to change my state
     valueChange = (textValue) => {
+
         this.setState({ phoneNumber: textValue })
     }
 
-
+    // FUNCTION FUNCTION FUNCTION
     goToMainPage = () => {
+        // redirects to Home page
         const { navigation } = this.props;
         navigation.navigate('PageNavigation');
         console.log('skip is working')
     }
 
+    // COMPONENT COMPONENT COMPONENT
+    // After you hit signin in LoginViews, it'll call this.
+    // This will give you the loading wheel while you are 
+    // redirected to Home
     renderButton = () => {
         if (this.state.loading) {
           return (
@@ -182,7 +213,7 @@ class LoginContainer extends Component {
     render() {
         const { user, confirmResult, codeInput, phoneNumber, loading } = this.state;
         return (
-            <LoginView
+            <Login
                 user={user}
                 confirmResult={confirmResult}
                 signOut={this.signOut}
@@ -200,4 +231,4 @@ class LoginContainer extends Component {
     }
 }
 
-export default withNavigation(LoginContainer);
+export default LoginContainer;
