@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native';
-import { Icon } from 'react-native-elements'
-import ImagePicker from 'react-native-image-picker';
+import { View, Button } from 'react-native';
+// import { Icon } from 'react-native-elements'
+import * as ImagePicker from 'react-native-image-picker';
 
 class CameraGallery extends Component {
     constructor(props) {
@@ -22,10 +22,11 @@ class CameraGallery extends Component {
         };
 
 
-        ImagePicker.showImagePicker(options, (response) => {
+        ImagePicker.launchImageLibrary(options, (res) => {
+            const response = res.assets[0]
             console.log('Response = ', response);
             this.setState({
-                IMAGE_URI: response.data
+                IMAGE_URI: response
             })
             const { IMAGE_URI } = this.state
 
@@ -48,9 +49,9 @@ class CameraGallery extends Component {
 
     render() {
         return (
-            <Button transparent>
-                <Icon name='create' color={'white'} fontSize={32} onPress={this.getImage} />
-            </Button>
+            <View transparent>
+                <Button title='Select Image' color='#19AC52' fontSize={32} onPress={this.getImage} />
+            </View>
         );
     }
 }

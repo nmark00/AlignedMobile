@@ -1,9 +1,11 @@
 // screens/AddUserScreen.js
 
 import React, { Component, useState } from 'react';
-import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
+import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker'
 import firebase from '../firebase/firebaseDB'
+import { uploadImage } from '../firebase/crud'
+import CameraGallery from '../components/CameraGallery'
 
 class AddUserScreen extends Component {
 	constructor() {
@@ -13,10 +15,20 @@ class AddUserScreen extends Component {
 			name: '',
 			gender: '',
 			astro: '',
+			imageUrl: '',
+			imageUpload: null, 
 			isLoading: false
 		};
 	}
 	
+	getUrl = (image, imageData) => {
+		const fileUri = decodeURI(image);
+		this.setState({
+			imageUrl: image,
+			imageUpload: fileUri
+		})
+	}
+
 	inputValueUpdate = (val, prop) => {
 		const state = this.state;
 		state[prop] = val;
@@ -78,6 +90,16 @@ class AddUserScreen extends Component {
 					<Button
 						title='Add User'
 						onPress={() => this.storeUser()}
+						color="#19AC52"
+					/>
+				</View>
+
+				<CameraGallery getImage={(url, base) => {this.getUrl(url, base)}} />
+				<Image source={{uri:this.state.imageUpload}}/>
+				<View style={styles.button}>
+					<Button
+						title='Upload Pic'
+						onPress={() => uploadImage(this.state.imageUpload)}
 						color="#19AC52"
 					/>
 				</View>
