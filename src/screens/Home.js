@@ -8,6 +8,8 @@ import UserScreen from './UserScreen';
 import UserDetailScreen from './UserDetailScreen';
 import Logout from './Logout';
 
+import styles from '../styles/tabBarStyles'
+
 const Tab = createBottomTabNavigator();
 
 export default function Home() {
@@ -32,6 +34,7 @@ export default function Home() {
           },
           tabBarActiveTintColor: 'blue',
           tabBarInactiveTintColor: 'gray',
+          tabBarStyle: styles.tabBar,
           headerStyle: {
             backgroundColor: '#621FF7',
           },
