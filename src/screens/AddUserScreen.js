@@ -5,6 +5,7 @@ import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Ima
 import { Picker } from '@react-native-picker/picker'
 import firebase from '../firebase/firebaseDB'
 import { uploadImage } from '../firebase/crud'
+import PhotoGallery from '../components/PhotoGallery'
 import CameraGallery from '../components/CameraGallery'
 
 class AddUserScreen extends Component {
@@ -93,9 +94,9 @@ class AddUserScreen extends Component {
 						color="#19AC52"
 					/>
 				</View>
-
 				<CameraGallery getImage={(url, base) => {this.getUrl(url, base)}} />
-				<Image source={{uri:this.state.imageUpload}}/>
+				<PhotoGallery getImage={(url, base) => {this.getUrl(url, base)}} />
+				<Image style={styles.small} source={{uri:this.state.imageUpload}}/>
 				<View style={styles.button}>
 					<Button
 						title='Upload Pic'
@@ -128,6 +129,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  small: {
+  	width: 70,
+  	height: 70
   }
 })
 

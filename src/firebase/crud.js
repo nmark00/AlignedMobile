@@ -18,12 +18,12 @@ export function uploadImage(imageBlob) {
     .then(() => {
         console.log(uri )
     }).catch(e => console.log('uploading image error => ', e))
-    // .then(() => {
-    //     ref.getDownloadURL()
-    //     .then(url => {
-    //         firebase.firestore()
-    //         .collection('users').doc(userId)
-    //         .update({pics: firebase.firestore.FieldValue.arrayUnion(url)})
-    //     })
-    // })
+    .then(() => {
+        ref.getDownloadURL()
+        .then(url => {
+            firebase.firestore()
+            .collection('users').doc(userId)
+            .set({pics: firebase.firestore.FieldValue.arrayUnion(url)}, {merge: true})
+        })
+    })
 }
