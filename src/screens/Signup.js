@@ -45,15 +45,28 @@ class Signup extends Component {
     return (
       <Stack.Navigator
         initialRouteName="SignupName"
-        screenOptions={{headerShown: false}}
+        // screenOptions={{headerShown: false}}
       >
         <Stack.Screen
           name="SignupName"
           component={SignupName}
+          initialParams={this.state}
+          options={ ({navigation, route }) => ({
+                      headerLeft: (props) => (
+                        <HeaderBackButton 
+                          {...props}
+                          onPress={()=> {
+                            auth().signOut();
+                            navigation.navigate('Login')
+                          }}/>
+                      ),
+                      headerBackTitle: "Login"
+                    })}
         />
         <Stack.Screen
           name="SignupBday"
           component={SignupBday}
+          options={{headerBackTitle: "Name"}}
         />
       </Stack.Navigator>
       )

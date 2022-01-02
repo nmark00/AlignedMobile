@@ -13,7 +13,6 @@ target 'AlignedMobile' do
   )
 
 
-
   target 'AlignedMobileTests' do
     inherit! :complete
     # Pods for testing

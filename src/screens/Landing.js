@@ -15,6 +15,7 @@ export default function Landing() {
   return (
     <Stack.Navigator
       initialRouteName="LandingComponent"
+      screenOptions={{gestureEnabled: false}}
     >
       <Stack.Screen
         name="LandingComponent"
@@ -32,7 +33,8 @@ export default function Landing() {
                           navigation.navigate('Login')
                         }}/>
                     ),
-                    headerBackTitle: "Login"
+                    headerBackTitle: "Login",
+                    headerShown: false
                   })}
       />
       <Stack.Screen

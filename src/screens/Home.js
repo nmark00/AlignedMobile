@@ -13,7 +13,25 @@ const Tab = createBottomTabNavigator();
 export default function Home() {
 	return (
       <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Logout') {
+              iconName = 'store';
+            } else if (route.name === 'AddUserScreen') {
+              iconName = 'home';
+            } else if (route.name === 'UserScreen') {
+              iconName = 'comments';
+            } else if (route.name === 'UserDetailScreen') {
+              iconName = 'user';
+            } else {
+              iconName = 'chart-pie;'
+            }
+            return <FontAwesome5 name={iconName} size={size} color={color} />
+          },
+          tabBarActiveTintColor: 'blue',
+          tabBarInactiveTintColor: 'gray',
           headerStyle: {
             backgroundColor: '#621FF7',
           },
@@ -21,7 +39,7 @@ export default function Home() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-        }}
+        })}
       >
       <Tab.Screen 
         name="Logout" 
