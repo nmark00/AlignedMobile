@@ -19,14 +19,12 @@ export default function SignupName(props) {
       <TextInput autoFocus
         style={styles.inputNumber}
         value={name}
-        onChangeText={(name) => {setName(name); props.navigation.setParams({name: name})}}
+        onChangeText={(name) => {setName(name); props.navigation.setParams({name: name}); }}
         textAlign={'center'}
       />
 
       <Button title="Continue" 
         onPress={() => {
-          // props.navigation.setParams({name: name})
-
           props.navigation.navigate('SignupBday', props.route.params);
 
         }}

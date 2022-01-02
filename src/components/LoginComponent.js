@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, ScrollView, View, Button, TextInput, Keyboard } from 'react-native';
 import styles from '../styles/Loginstyles'
 import { CallingCodePicker } from '@digieggs/rn-country-code-picker';
+import { TextInputMask } from 'react-native-masked-text'
 
 Keyboard.dismiss()
 export default function Login(props) {
-
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [selectedCallingCode, setSelectedCallingCode] = useState('1');
   return (
@@ -18,12 +18,14 @@ export default function Login(props) {
           onValueChange={value => setSelectedCallingCode(value)}
           style={styles.codePicker}
         />
-        <TextInput autoFocus
+        <TextInputMask 
           style={styles.inputNumber}
+          maxLength={12}
+          type={'custom'}
+          keyboardType='numeric'
+          options={{mask: '999 999 9999'}}
           value={phoneNumber}
-          keyboardType="numeric"
           onChangeText={setPhoneNumber}
-          textAlign={'center'}
         />
       </View>
       <Button title="Phone Number Sign In" 

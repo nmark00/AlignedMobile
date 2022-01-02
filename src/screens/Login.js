@@ -11,6 +11,7 @@ export default function Login(props) {
 
   async function signIn(selectedCallingCode, phoneNumber) {
     try {
+      phoneNumber = phoneNumber.replaceAll('-','').replaceAll(' ','')
       if (phoneNumber == null || phoneNumber.toString().length !== 10) {
         alert('Invalid phone number!');
         return;

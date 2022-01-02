@@ -14,7 +14,7 @@ export default styles = {
     inputNumber: {
         borderWidth: 2,
         borderColor: 'lightblue',
-        width: 220,
+        width: 230,
         marginVertical: 30,
         fontSize: 20,
         padding: 10,
@@ -48,6 +48,16 @@ export default styles = {
     },
     fieldRow: {
         flexDirection: 'row'
+    },
+    digit: {
+        width: 50,
+        height: 50,
+        marginLeft:5,
+        marginRight:5,
+        fontSize: 15,
+        borderWidth: 2,
+        borderColor: 'lightblue',
+        textAlign: 'center'
     }
     
     // fullwidthHeight: {
