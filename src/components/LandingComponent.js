@@ -13,13 +13,9 @@ class LandingComponent extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				 <Button
-            title="Sign up"
-            onPress={ ()=>{this.props.navigation.navigate('Signup');} }
-            color="#E37399"
-          />
+
           <Button
-            title="Log in"
+            title="Log in with phone number"
             onPress={ ()=>{this.props.navigation.navigate('Login');} }
             color="#E37399"
           />

@@ -1,39 +1,74 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import React, { Component } from 'react';
+import auth from '@react-native-firebase/auth';
 
-export default function Login(props) {
-  const [phoneNumber, setPhoneNumber] = useState(null);
+import { createStackNavigator } from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/elements';
 
+import SignupName from '../components/SignupName';
+import SignupBday from '../components/SignupBday';
+
+const Stack = createStackNavigator();
+
+export default function Signup() {
   return (
-    <View style={styles.screen}>
-      <Text style={styles.text}>Enter Phone Number</Text>
-      <TextInput
-        autoFocus
-        style={styles.input}
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
-      />
-      <Button title="Phone Number Sign In" onPress={() => props.onSubmit(phoneNumber)} />
-    </View>
-  );
+    <Stack.Navigator
+        initialRouteName="SignupName"
+        screenOptions={{headerShown: false}}
+      >
+        <Stack.Screen
+          name="SignupName"
+          component={SignupName}
+        />
+        <Stack.Screen
+          name="SignupBday"
+          component={SignupBday}
+        />
+      </Stack.Navigator>
+    )
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    borderWidth: 2,
-    borderColor: 'lightblue',
-    width: 300,
-    marginVertical: 30,
-    fontSize: 25,
-    padding: 10,
-    borderRadius: 8,
-  },
-  text: {
-    fontSize: 25,
-  },
-});
+// 
+// class Signup extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       name: '',
+//       bday: '',
+//       gender: '',
+//       sPref: '',
+//       isLoading: false
+//     }
+//   }
+//   
+// 
+//   render() {
+//     return (
+//       <Stack.Navigator
+//         initialRouteName="SignupName"
+//         screenOptions={{headerShown: false}}
+//       >
+//         <Stack.Screen
+//           name="SignupName"
+//           component={SignupName}
+//           options={{
+//             headerLeft: (props) => (
+//               <HeaderBackButton 
+//                 {...props}
+//                 onPress={()=> {
+//                   auth().signOut();
+//                   props.navigation.navigate('Login')
+//                 }}/>
+//             ),
+//             headerBackTitle: "Landing"
+//           }}
+//         />
+//         <Stack.Screen
+//           name="SignupBday"
+//           component={SignupBday}
+//         />
+//       </Stack.Navigator>
+//       )
+//   }
+// 
+// }
+// export default Signup;

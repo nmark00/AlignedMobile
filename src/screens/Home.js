@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, FlatList,Alert } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import AddUserScreen from './AddUserScreen';
 import UserScreen from './UserScreen';

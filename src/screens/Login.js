@@ -9,9 +9,14 @@ export default function Login(props) {
   const [confirm, setConfirm] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
 
-  async function signIn(phoneNumber) {
+  async function signIn(selectedCallingCode, phoneNumber) {
     try {
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      if (phoneNumber == null || phoneNumber.toString().length !== 10) {
+        alert('Invalid phone number!');
+        return;
+      }
+      const fullNumber = '+' + selectedCallingCode.toString() + phoneNumber.toString();
+      const confirmation = await auth().signInWithPhoneNumber(fullNumber);
       setConfirm(confirmation);
     } catch (error) {
       alert(error)
@@ -36,7 +41,10 @@ export default function Login(props) {
   })
 
   if (authenticated) {
-    return <View>{props.navigation.navigate('Home')}</View>
+    if (auth().currentUser.displayName)
+      return <View>{props.navigation.navigate('Home')}</View>
+    else
+      return <View>{props.navigation.navigate('Signup')}</View>
   }
 
   if (confirm) return <VerifyCode onSubmit={confirmVerificationCode}/>;
