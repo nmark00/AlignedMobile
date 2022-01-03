@@ -130,7 +130,7 @@ export default function SignupBday(props) {
       <Button title="Continue" 
         onPress={() => {
           setProfileIsReady(true);
-          props.navigation.navigate('Home', props.route.params);
+          props.navigation.navigate('SignupPics', props.route.params);
         }}
         disabled={!m1 || !m2 || !y1 || !y2 || isNaN(bday)} />
 

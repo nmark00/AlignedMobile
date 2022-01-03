@@ -6,6 +6,7 @@ import { HeaderBackButton } from '@react-navigation/elements';
 
 import SignupName from '../components/SignupName';
 import SignupBday from '../components/SignupBday';
+import SignupPics from '../components/SignupPics';
 
 const Stack = createStackNavigator();
 // 
@@ -36,6 +37,7 @@ class Signup extends Component {
       bday: '',
       gender: '',
       sPref: '',
+      pics: Array(6),
       isLoading: false
     }
   }
@@ -45,6 +47,7 @@ class Signup extends Component {
     return (
       <Stack.Navigator
         initialRouteName="SignupName"
+        screenOptions={{gestureEnabled: false}}
         // screenOptions={{headerShown: false}}
       >
         <Stack.Screen
@@ -67,6 +70,11 @@ class Signup extends Component {
           name="SignupBday"
           component={SignupBday}
           options={{headerBackTitle: "Name"}}
+        />
+        <Stack.Screen
+          name="SignupPics"
+          component={SignupPics}
+          options={{headerBackTitle: "Bday"}}
         />
       </Stack.Navigator>
       )
