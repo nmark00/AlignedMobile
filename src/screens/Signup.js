@@ -37,7 +37,7 @@ class Signup extends Component {
       bday: '',
       gender: '',
       sPref: '',
-      pics: Array(6),
+      pics: [],
       isLoading: false
     }
   }
