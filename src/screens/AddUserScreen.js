@@ -94,7 +94,7 @@ class AddUserScreen extends Component {
 						color="#19AC52"
 					/>
 				</View>
-				<CameraGallery getImage={(url, base) => {this.getUrl(url, base)}} />
+				<CameraGallery getImage={(url, base) => {this.getUrl(url, '')}} />
 				<PhotoGallery getImage={(url, base) => {this.getUrl(url, base)}} />
 				<Image style={styles.small} source={{uri:this.state.imageUpload}}/>
 				<View style={styles.button}>
