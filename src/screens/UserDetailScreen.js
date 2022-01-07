@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Alert, Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
 import firebase from '../firebase/firebaseDB'
 import Card from '../components/Card'
+import ProfileCard from '../components/ProfileCard'
 
 class UserDetailScreen extends Component {
 
@@ -13,7 +14,6 @@ class UserDetailScreen extends Component {
       name: '',
       bio: '',
       gender: '',
-      astro: '',
       isLoading: true
     };
   }
@@ -28,7 +28,6 @@ class UserDetailScreen extends Component {
           name: user.name,
           bio: user.bio,
           gender: user.gender,
-          astro: user.astro,
           isLoading: false
         });
       } else {
@@ -52,14 +51,12 @@ class UserDetailScreen extends Component {
       name: this.state.name,
       bio: this.state.bio,
       gender: this.state.gender,
-      astro: this.state.astro
-    }).then(docRef => {
+    }, {merge: true}).then(docRef => {
       this.setState({
         key: '',
         name: '',
         bio: '',
         gender: '',
-        astro: '',
         isLoading: ''
       });
       this.props.navigation.navigate('UserScreen');
@@ -100,7 +97,7 @@ class UserDetailScreen extends Component {
     return (
       <ScrollView style={styles.container}>
         <View>
-          <Card/>
+          <ProfileCard userkey={this.props.route.params.userkey}/>
         </View>
         <View style={styles.inputGroup}>
           <TextInput

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import auth from '@react-native-firebase/auth';
 
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
@@ -26,11 +27,15 @@ const Stack = createStackNavigator();
 
 
 export default function App() {
+  let initRoute;
+  if (auth().currentUser && auth().currentUser.displayName)
+    initRoute = "Home";
+  else initRoute = "Landing";
 
   return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Landing"
+          initialRouteName={initRoute}
           screenOptions={{headerShown: false}}
         >
           <Stack.Screen

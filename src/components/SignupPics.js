@@ -34,6 +34,7 @@ export default function SignupName(props) {
       params.pics.push(url)
     }
     await firebase.firestore().collection('users').doc(uid).set(params)
+    await auth().currentUser.updateProfile({ displayName: params.name })
     props.navigation.navigate('Home', params)
   }
 
