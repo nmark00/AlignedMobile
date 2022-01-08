@@ -6,7 +6,7 @@ import { HeaderBackButton } from '@react-navigation/elements';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import AddUserScreen from './AddUserScreen';
+import HomeScreen from './HomeScreen';
 import Chats from './Chats';
 import UserDetailScreen from './UserDetailScreen';
 import Logout from './Logout';
@@ -32,7 +32,7 @@ export default function Home(props) {
       
                   if (route.name === 'Logout') {
                     iconName = 'store';
-                  } else if (route.name === 'AddUserScreen') {
+                  } else if (route.name === 'HomeScreen') {
                     iconName = 'home';
                   } else if (route.name === 'Chats') {
                     iconName = 'comments';
@@ -62,9 +62,9 @@ export default function Home(props) {
               options={{ title: 'Logout' }}
             />
             <Tab.Screen 
-              name="AddUserScreen" 
-              component={AddUserScreen} 
-              options={{ title: 'Add User' }}
+              name="HomeScreen" 
+              component={HomeScreen} 
+              options={{ title: 'Home' }}
             />
             <Tab.Screen 
               name="Chats" 
