@@ -59,7 +59,7 @@ class UserDetailScreen extends Component {
         gender: '',
         isLoading: ''
       });
-      this.props.navigation.navigate('UserScreen');
+      // this.props.navigation.navigate('UserScreen');
     }).catch(error => {
       console.error("Error: ", error);
       this.setState({isLoading: false});

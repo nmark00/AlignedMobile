@@ -60,8 +60,9 @@ class UserScreen extends Component {
 								}}>
 								<ProfileCard userkey={item}/>
 							</ListItem>
-
 							);
+						} else {
+							<Text>When someone likes you back, your matches will go here!</Text>
 						}
 					})
 				}
@@ -84,6 +85,8 @@ class UserScreen extends Component {
 									</ListItem>
 
 									);
+							} else {
+								<Text>Open a pack to send a like!</Text>
 							}
 						})
 					}
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   card: {
-  	
+
   }
 })
 

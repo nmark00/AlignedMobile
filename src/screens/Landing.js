@@ -20,6 +20,7 @@ export default function Landing() {
       <Stack.Screen
         name="LandingComponent"
         component={LandingComponent}
+        options={{headerLeft: props => null }}
       />
       <Stack.Screen
         name="Signup"
