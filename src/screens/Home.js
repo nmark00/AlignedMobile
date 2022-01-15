@@ -10,6 +10,7 @@ import HomeScreen from './HomeScreen';
 import Chats from './Chats';
 import UserDetailScreen from './UserDetailScreen';
 import Logout from './Logout';
+import MarketplaceNavigator from './MarketNavigator'
 
 import styles from '../styles/tabBarStyles'
 
@@ -38,6 +39,8 @@ export default function Home(props) {
                     iconName = 'comments';
                   } else if (route.name === 'UserDetailScreen') {
                     iconName = 'user';
+                  } else if (route.name === 'MarketplaceNavigator') {
+                    iconName = 'store';
                   } else {
                     iconName = 'chart-pie;'
                   }
@@ -60,6 +63,11 @@ export default function Home(props) {
               name="Logout" 
               component={Logout} 
               options={{ title: 'Logout' }}
+            />
+            <Tab.Screen 
+              name="MarketplaceNavigator" 
+              component={MarketplaceNavigator} 
+              options={{ title: 'MarketplaceNavigator' }}
             />
             <Tab.Screen 
               name="HomeScreen" 

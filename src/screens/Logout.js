@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firebase from '../firebase/firebaseDB';
 
 export default function Authenticated(props) {
 
@@ -8,6 +9,18 @@ export default function Authenticated(props) {
     auth().signOut();
     props.navigation.navigate('Landing', {screen: 'LandingComponent'})
   }
+
+  function getUsers(forbiddenUsers) {
+    firebase.firestore().collection('users')
+    .where(firebase.firestore.FieldPath.documentId(), 'not-in', forbiddenUsers)
+    .limit(8)
+    .get()
+    .then(querySnapshot => {
+      console.log(querySnapshot.docs[0].id);
+      console.log(querySnapshot.size);
+    });
+  }
+  getUsers([auth().currentUser.uid]);
 
   return (
     <View style={styles.screen}>
