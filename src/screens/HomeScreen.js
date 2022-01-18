@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, ActivityIndicator, View, Text } from 'react-native';
+import { StyleSheet, ScrollView, ActivityIndicator, View, Text, Button } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements'
 import ProfileCard from '../components/ProfileCard'
 import auth from '@react-native-firebase/auth';
@@ -15,6 +15,11 @@ class UserScreen extends Component {
 			likes: []
 		};
 	}
+
+	signout() {
+    auth().signOut();
+    props.navigation.navigate('Landing', {screen: 'LandingComponent'})
+  }
 
 	componentDidMount() {
 		const ref = firebase.firestore().collection('users').doc(auth().currentUser.uid);
@@ -44,7 +49,9 @@ class UserScreen extends Component {
 		}
 		return (
 			<ScrollView>
-				<Text style={styles.text}>Matches</Text>
+			<Text style={{...styles.text, textAlign: 'center'}}>Welcome {auth().currentUser.displayName}</Text>
+			<View style={styles.line}/>
+				<Text style={styles.text}>My Matches</Text>
 				<ScrollView style={styles.container} horizontal={true}>
 				{
 					this.state.matches.map((item, i) => {
@@ -67,7 +74,9 @@ class UserScreen extends Component {
 					})
 				}
 				</ScrollView>
-				<Text style={styles.text}>Likes</Text>
+
+				<View style={styles.line}/>
+				<Text style={styles.text}>My Likes</Text>
 				<ScrollView style={styles.container} horizontal={true}>
 					{
 						this.state.likes.map((item, i) => {
@@ -91,6 +100,16 @@ class UserScreen extends Component {
 						})
 					}
 				</ScrollView>
+
+				<View style={styles.line}/>
+				<Text style={styles.text}>My Profile</Text>
+				<View style={styles.container}>
+					<ProfileCard userkey={auth().currentUser.uid}/>
+				</View>
+
+				<View style={{ marginTop: 30, marginBottom: 30 }}>
+	        <Button title="Signout" onPress={this.signout} />
+	      </View>
 			</ScrollView>
 		);
 	}
@@ -102,6 +121,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 21,
+    padding: 20
   },
   preloader: {
     left: 0,
@@ -114,6 +134,10 @@ const styles = StyleSheet.create({
   },
   card: {
 
+  },
+  line: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
   }
 })
 

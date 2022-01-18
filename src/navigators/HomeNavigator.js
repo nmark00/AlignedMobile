@@ -9,8 +9,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from '../screens/HomeScreen';
 import Chats from '../screens/Chats';
 import UserDetailScreen from '../screens/UserDetailScreen';
-import Logout from '../screens/Logout';
 import MarketplaceNavigator from './MarketNavigator'
+import Stats from '../screens/StatsScreen';
 
 import styles from '../styles/tabBarStyles'
 
@@ -31,18 +31,16 @@ export default function HomeNavigator(props) {
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
       
-                  if (route.name === 'Logout') {
+                  if (route.name === 'HomeScreen') {
                     iconName = 'user';
-                  } else if (route.name === 'HomeScreen') {
-                    iconName = 'home';
                   } else if (route.name === 'Chats') {
                     iconName = 'comments';
                   } else if (route.name === 'UserDetailScreen') {
                     iconName = 'user';
-                  } else if (route.name === 'MarketplaceNavigator') {
+                  } else if (route.name === 'Market') {
                     iconName = 'store';
-                  } else {
-                    iconName = 'chart-pie;'
+                  } else if (route.name === 'Stats'){
+                    iconName = 'chart-pie'
                   }
                   return <FontAwesome5 name={iconName} size={size} color={color} />
                 },
@@ -60,19 +58,19 @@ export default function HomeNavigator(props) {
               })}
             >
             <Tab.Screen 
-              name="Logout" 
-              component={Logout} 
-              options={{ title: 'Logout' }}
+              name="Stats" 
+              component={Stats} 
+              options={{ title: 'Stats' }}
             />
             <Tab.Screen 
-              name="MarketplaceNavigator" 
+              name="Market" 
               component={MarketplaceNavigator} 
-              options={{ title: 'MarketplaceNavigator' }}
+              options={{ title: 'Market', headerShown: false }}
             />
             <Tab.Screen 
               name="HomeScreen" 
               component={HomeScreen} 
-              options={{ title: 'Home' }}
+              options={{ title: 'Account' }}
             />
             <Tab.Screen 
               name="Chats" 

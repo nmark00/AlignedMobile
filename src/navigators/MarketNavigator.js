@@ -16,7 +16,11 @@ export default function MarketNavigator() {
   return (
     <Stack.Navigator
       initialRouteName="MarketplaceScreen"
-      screenOptions={{gestureEnabled: false, headerShown: false}}
+      screenOptions={{gestureEnabled: false, headerShown: true, 
+        headerStyle: {
+          backgroundColor: '#621FF7',
+        },headerTintColor: '#fff',
+      }}
     >
       <Stack.Screen
         name="OpenPacksScreen"
