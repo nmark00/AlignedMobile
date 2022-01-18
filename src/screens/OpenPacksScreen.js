@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, ScrollView, View, Text, Image, TouchableOpacity, Animated, useWindowDimensions } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, Animated, useWindowDimensions } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements'
 import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
@@ -16,14 +16,14 @@ class UserScreen extends Component {
 			animation: new Animated.Value(0),
 			matches: [],
 			likes: [],
-			isLoading: true,
+			canScroll: false,
 			packUsers: [],
 			opacity: 1
 		};
 	}
 
 	StartAnimation = () => {
-		this.setState({opacity: 0})
+		this.setState({opacity: 0, canScroll: true})
 		Animated.timing(this.state.animation, {
 			// toValue: {x: 250, y: 250},
 			toValue: 100,
@@ -95,8 +95,6 @@ class UserScreen extends Component {
 				this.setState({
 					matches: user.matches,
 					likes: user.likes,
-					isLoading: false,
-					// packUsers: packUsers
 				});
 			} else {
 				console.log("Document does not exist!");
@@ -118,7 +116,7 @@ class UserScreen extends Component {
 		}
 
     return (
-      <ScrollView style={[styles.container]} horizontal={true}>
+      <ScrollView style={[styles.container]} horizontal={true} scrollEnabled={this.state.canScroll}>
         <TouchableOpacity onPress={this.StartAnimation} style={{zIndex: 999}}>
           	<Image style={{...styles.image1, opacity: this.state.opacity}}
                 source={require('../../public/images/aquarius-cardback.png')}/>
