@@ -4,9 +4,9 @@ import auth from '@react-native-firebase/auth';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/elements';
 
-import SignupName from '../components/SignupName';
-import SignupBday from '../components/SignupBday';
-import SignupPics from '../components/SignupPics';
+import SignupName from '../screens/SignupName';
+import SignupBday from '../screens/SignupBday';
+import SignupPics from '../screens/SignupPics';
 
 const Stack = createStackNavigator();
 

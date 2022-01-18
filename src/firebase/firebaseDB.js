@@ -18,4 +18,6 @@ if (!firebase.apps.length) {
 }
 firebase.firestore();
 
+Geocoder.init('AIzaSyCXaT4TYLIAnN8rbf8IRPiW9IFRbwDd23Q')
+
 export default firebase;
