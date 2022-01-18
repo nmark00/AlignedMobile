@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import firestore from 'firebase/firestore'
+import Geocoder from 'react-native-geocoding';
 
 import '@firebase/auth';
 import '@firebase/firestore';

@@ -8,7 +8,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import HomeScreen from '../screens/HomeScreen';
 import Chats from '../screens/Chats';
-import UserDetailScreen from '../screens/UserDetailScreen';
+import EditProfile from '../screens/EditProfileScreen';
 import MarketplaceNavigator from './MarketNavigator'
 import Stats from '../screens/StatsScreen';
 
@@ -35,7 +35,7 @@ export default function HomeNavigator(props) {
                     iconName = 'user';
                   } else if (route.name === 'Chats') {
                     iconName = 'comments';
-                  } else if (route.name === 'UserDetailScreen') {
+                  } else if (route.name === 'EditProfile') {
                     iconName = 'user';
                   } else if (route.name === 'Market') {
                     iconName = 'store';
@@ -81,8 +81,8 @@ export default function HomeNavigator(props) {
     </Stack.Screen>
 
     <Stack.Screen 
-     name="UserDetailScreen" 
-     component={UserDetailScreen} 
+     name="EditProfileScreen" 
+     component={EditProfile} 
      options={ ({ navigation, route }) => ({
                       headerLeft: (props) => (
                         <HeaderBackButton 
@@ -91,7 +91,7 @@ export default function HomeNavigator(props) {
                             navigation.navigate('Tab')
                           }}/>
                       ),
-                      headerBackTitle: "Chats",
+                      headerBackTitle: "Back",
                       headerShown: true,
 
                     })

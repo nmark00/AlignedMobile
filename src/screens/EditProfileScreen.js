@@ -1,52 +1,41 @@
-// screens/UserDetailScreen.js
-
 import React, { Component } from 'react';
 import { Alert, Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
 import firebase from '../firebase/firebaseDB'
-import Card from '../components/Card'
 import ProfileCard from '../components/ProfileCard'
+import auth from '@react-native-firebase/auth';
 
 class UserDetailScreen extends Component {
 
   constructor() {
     super();
     this.state = {
+      gender: '',
       name: '',
       bio: '',
-      gender: '',
-      isLoading: true
+      sPref: '',
+      pics: [],
+      uid: ''
     };
   }
 
   componentDidMount() {
-    const dbRef = firebase.firestore().collection('users').doc(this.props.route.params.userkey)
-    dbRef.get().then(res => {
-      if (res.exists) {
-        const user = res.data();
-        this.setState({
-          key: res.id,
-          name: user.name,
-          bio: user.bio,
-          gender: user.gender,
-          isLoading: false
-        });
-      } else {
-        console.log("Document does not exist!")
-      }
+
+    this.setState({
+      gender: this.props.route.params.gender,
+      name: this.props.route.params.name,
+      bio: this.props.route.params.bio,
+      sPref: this.props.route.params.sPref,
+      pics: this.props.route.params.pics,
+      uid: this.props.route.params.userkey
     });
   }
 
-  inputValueUpdate = (val, prop) => {
-    const state = this.state; 
-    state[prop] = val;
-    this.setState(state);
-  }
 
   updateUser() {
     this.setState({
       isLoading: true,
     });
-    const updateDBRef = firebase.firestore().collection('users').doc(this.state.key);
+    const updateDBRef = firebase.firestore().collection('users').doc(this.state.uid);
     updateDBRef.set({
       name: this.state.name,
       bio: this.state.bio,
@@ -57,9 +46,9 @@ class UserDetailScreen extends Component {
         name: '',
         bio: '',
         gender: '',
-        isLoading: ''
+        isLoading: false
       });
-      // this.props.navigation.navigate('UserScreen');
+      this.props.navigation.navigate('HomeScreen');
     }).catch(error => {
       console.error("Error: ", error);
       this.setState({isLoading: false});
@@ -67,10 +56,11 @@ class UserDetailScreen extends Component {
   }
 
   deleteUser() {
+    auth().signOut();
     const dbRef = firebase.firestore().collection('users').doc(this.props.route.params.userkey)
     dbRef.delete().then(res => {
       console.log('Item removed from database')
-      this.props.navigation.navigate('UserScreen');
+      this.props.navigation.navigate('Landing', {screen: 'LandingComponent'});
     })
   }
 
@@ -96,14 +86,12 @@ class UserDetailScreen extends Component {
     }
     return (
       <ScrollView style={styles.container}>
-        <View>
-          <ProfileCard userkey={this.props.route.params.userkey}/>
-        </View>
+
         <View style={styles.inputGroup}>
           <TextInput
             placeholder={'Name'}
             value={this.state.name}
-            onChangeText={val => this.inputValueUpdate(val, 'name')}
+            onChangeText={val => this.setState({name: val})}
           />
         </View>
         <View style={styles.inputGroup}>
@@ -112,7 +100,7 @@ class UserDetailScreen extends Component {
             numberOfLines={4}
             placeholder={'Bio'}
             value={this.state.bio}
-            onChangeText={val => this.inputValueUpdate(val, 'bio')}
+            onChangeText={val => this.setState({bio: val})}
           />
         </View>
         <View style={styles.button}>

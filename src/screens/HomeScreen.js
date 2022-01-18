@@ -11,31 +11,45 @@ class UserScreen extends Component {
 		super();
 		this.state = {
 			isLoading: true,
-			matches: [],
-			likes: []
+			myProfileCard: '',
+			user: {}
 		};
 	}
 
 	signout() {
     auth().signOut();
-    props.navigation.navigate('Landing', {screen: 'LandingComponent'})
+    this.props.navigation.navigate('Landing', {screen: 'LandingComponent'})
   }
 
-	componentDidMount() {
-		const ref = firebase.firestore().collection('users').doc(auth().currentUser.uid);
+  fetchData() {
+  	const ref = firebase.firestore().collection('users').doc(auth().currentUser.uid);
 		ref.get().then(res => {
 			if (res.exists) {
 				const user = res.data();
 				this.setState({
-					matches: user.matches,
-					likes: user.likes,
-					isLoading: false
+					user: user,
+					myProfileCard: <ProfileCard rerender={true} userkey={auth().currentUser.uid}/>,
+					isLoading: false,
 				});
-				console.log(user.matches)
 			} else {
 				console.log("Document does not exist!");
 			}
 		});
+  }
+
+	componentDidMount() {
+		this.fetchData();
+
+		this.focusListener = this.props.navigation.addListener(
+			'focus', 
+			() => { this.fetchData(); }
+		);
+
+		
+	}
+
+	componentWillUnmount() {
+		this.focusListener();
 	}
 
 
@@ -54,17 +68,10 @@ class UserScreen extends Component {
 				<Text style={styles.text}>My Matches</Text>
 				<ScrollView style={styles.container} horizontal={true}>
 				{
-					this.state.matches.map((item, i) => {
+					this.state.user.matches.map((item, i) => {
 						if (item) {
 							return (
-							<ListItem
-								key={i}
-								bottomDivider
-								onPress={()=> {
-									this.props.navigation.navigate('UserDetailScreen', {
-										userkey: item
-									});
-								}}>
+							<ListItem key={i} >
 								<ProfileCard userkey={item}/>
 							</ListItem>
 							);
@@ -79,17 +86,10 @@ class UserScreen extends Component {
 				<Text style={styles.text}>My Likes</Text>
 				<ScrollView style={styles.container} horizontal={true}>
 					{
-						this.state.likes.map((item, i) => {
+						this.state.user.likes.map((item, i) => {
 							if (item) {
 								return (
-									<ListItem
-										key={i}
-										bottomDivider
-										onPress={()=> {
-											this.props.navigation.navigate('UserDetailScreen', {
-												userkey: item
-											});
-										}}>
+									<ListItem key={i} >
 										<ProfileCard userkey={item}/>
 									</ListItem>
 
@@ -102,9 +102,27 @@ class UserScreen extends Component {
 				</ScrollView>
 
 				<View style={styles.line}/>
-				<Text style={styles.text}>My Profile</Text>
+				<View style={styles.fieldRow}>
+					<Text style={styles.text}>My Profile</Text>
+					<Button title="Edit"
+						style={{position: 'absolute', right: 0}}
+						onPress={() => {
+							this.props.navigation.navigate(
+								'EditProfileScreen', 
+								{
+									userkey: auth().currentUser.uid,
+									gender: this.state.user.gender,
+									name:this.state.user.name,
+									bio: this.state.user.bio,
+									sPref: this.state.user.sPref,
+									pics: this.state.user.pics,
+								}
+							)
+						}}/>
+				</View>
 				<View style={styles.container}>
-					<ProfileCard userkey={auth().currentUser.uid}/>
+					{this.state.myProfileCard}
+					{/* <ProfileCard userkey={auth().currentUser.uid}/> */}
 				</View>
 
 				<View style={{ marginTop: 30, marginBottom: 30 }}>
@@ -132,8 +150,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  card: {
-
+  fieldRow: {
+  	flexDirection: 'row',
   },
   line: {
     borderBottomColor: 'black',

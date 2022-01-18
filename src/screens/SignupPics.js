@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View, Button, TextInput, Keyboard, Image, Activ
 import auth from '@react-native-firebase/auth';
 import firebase from '../firebase/firebaseDB'
 import styles from '../styles/Loginstyles'
-import ChoosePic from './ChoosePic'
+import ChoosePic from '../components/ChoosePic'
 import storage from '@react-native-firebase/storage'
 import uuid from 'react-native-uuid'
 

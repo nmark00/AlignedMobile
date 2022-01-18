@@ -6,7 +6,7 @@ import firebase from '../firebase/firebaseDB'
 import styles from '../styles/ProfileCardStyles'
 
 class ProfileCard extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       key: '',
@@ -18,13 +18,14 @@ class ProfileCard extends Component {
       picIndex: 0,
       urls: []
     };
-    this.dbRef = firebase.firestore().collection('users').doc(props.userkey)
+    // this.dbRef = firebase.firestore().collection('users').doc(props.userkey)
     this.leftPicTap = this.leftPicTap.bind(this)
     this.rightPicTap = this.rightPicTap.bind(this)
   }
 
   componentDidMount() {
-    this.dbRef.get().then(res => {
+    const dbRef = firebase.firestore().collection('users').doc(this.props.userkey)
+    dbRef.get().then(res => {
       // if (res.exists) {
         const user = res.data();
         this.setState({

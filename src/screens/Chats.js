@@ -57,7 +57,7 @@ class Chats extends Component {
 								key={i}
 								bottomDivider
 								onPress={()=> {
-									this.props.navigation.navigate('UserDetailScreen', {
+									this.props.navigation.navigate('EditProfileScreen', {
 										userkey: item.key
 									});
 								}}>
