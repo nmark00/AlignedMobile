@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, ScrollView, View, Text, Image, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, ActivityIndicator, ScrollView, View, Text, Image, TouchableOpacity, Animated, useWindowDimensions } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements'
 import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
 import firebase from '../firebase/firebaseDB';
-import { uniqueNamesGenerator, adjectives } from 'unique-names-generator';
+
+const LIMIT = 8;
 
 class UserScreen extends Component {
 
@@ -22,8 +23,7 @@ class UserScreen extends Component {
 	}
 
 	StartAnimation = () => {
-		this.setState({opacity: 0.5})
-		this.GetUsers([auth().currentUser.uid]);
+		this.setState({opacity: 0})
 		Animated.timing(this.state.animation, {
 			// toValue: {x: 250, y: 250},
 			toValue: 100,
@@ -33,10 +33,10 @@ class UserScreen extends Component {
 	}
 
 	GetUsers = (forbiddenUsers) => {
-		console.log(forbiddenUsers)
+		// console.log(forbiddenUsers)
 		firebase.firestore().collection('users')
 		.where(firebase.firestore.FieldPath.documentId(), 'not-in', forbiddenUsers)
-		.limit(8)
+		.limit(LIMIT)
 		.get()
 		.then(querySnapshot => {
 			console.log(querySnapshot.docs.map(a => a.id))
@@ -45,16 +45,47 @@ class UserScreen extends Component {
 		});
 	}
 
-	CreateUsers = () => {
-		var gender = 'male'
-		const xml = new XMLHttpRequest();
-		xml.open("GET", 'https://randomuser.me/api/?gender='+gender, false);
-		xml.send(null);
-		const obj = JSON.parse(xml.response)
-		const url = obj.results[0].picture.large
+	CreateUsers = async (packSize) => {
+		const genders = ['male', 'female']
+		for (var i = 0; i < packSize; i++) {
+			const gender = genders[Math.floor(Math.random()*2)]
+			const sPref = [... new Set([genders[Math.floor(Math.random()*2)],genders[Math.floor(Math.random()*2)]])]
+			const picURL = await this.GetImgURL(gender);
+			const user0 = await this.GetUserText(gender);
+			const userObj = {
+				...user0,
+				pics: [picURL],
+				gender: gender,
+				likes: [],
+				matches: [],
+				sPref: sPref
+			}
+			console.log(userObj);
+			await firebase.firestore().collection('users').doc().set(userObj)
+		}
+		
+	}
+	GetImgURL = (gender) => {
+		return fetch("https://randomuser.me/api/?gender="+gender)
+		.then(response => response.json())
+		.then(obj => {
+			return obj.results[0].picture.large
+		});
+	}
+	GetUserText = (gender) => {
+		return fetch("https://api.namefake.com/english/"+gender)
+		.then(response => response.json())
+		.then(obj => {
+			return {
+				name: obj.name,
+				bday: obj.birth_data,
+				bio: obj.address
+			}
+		});
 	}
 
 	componentDidMount() {
+		// this.CreateUsers(10)
 		const uid = auth().currentUser.uid;
 		const ref = firebase.firestore().collection('users').doc(uid);
 		ref.get().then(res => {
@@ -75,48 +106,33 @@ class UserScreen extends Component {
 
 
 	render() {
-		const xVal = this.state.animation.interpolate({
-      inputRange: [0, 100],
-      outputRange: [0, 100],
-    });
-    // const yVal = this.state.animation.interpolate({
-    //   inputRange: [0, 50],
-    //   outputRange: [0, 50],
-    // });
+		const animStyles = []
+		for (var i = 0; i < LIMIT; i++) {
+			const xVal = this.state.animation.interpolate({
+				inputRange: [0, 100],
+				outputRange: [-320*i-320, -320 + i*20]
+			});
+			animStyles.push({
+				transform: [{ translateX: xVal }]
+			});
+		}
 
-    const animStyle = {
-      transform: [
-        {
-          translateX: xVal,
-        },
-        // {
-        // 	translateY: yVal
-        // }
-      ],
-    };
     return (
-      <ScrollView style={styles.container} horizontal={true}>
-        <TouchableOpacity onPress={this.StartAnimation}>
-          <Animated.View style={[styles.image1, animStyle]}>
+      <ScrollView style={[styles.container]} horizontal={true}>
+        <TouchableOpacity onPress={this.StartAnimation} style={{zIndex: 999}}>
           	<Image style={{...styles.image1, opacity: this.state.opacity}}
                 source={require('../../public/images/aquarius-cardback.png')}/>
-          </Animated.View>
         </TouchableOpacity>
-				{/* { */}
-				{/* 	this.state.packUsers.map((item, i) => { */}
-				{/* 		if (item) { */}
-				{/* 			return ( */}
-				{/* 				<ListItem */}
-				{/* 					key={i}> */}
-				{/* 					<Animated.View style={[styles.image1, animStyle]}> */}
-				{/* 	        	<ProfileCard userkey={item}/> */}
-				{/* 	        </Animated.View> */}
-				{/* 					</ListItem> */}
-				{/* 			); */}
-				{/* 		} */}
-				{/* 	}) */}
-    {/*     } */}
-    	 <Text>{this.state.packUsers}</Text>
+				{ this.state.packUsers.map((item, i) => {
+						if (item) {
+							return (
+								<Animated.View key={i} style={[{ marginTop: 40, height: 470, width: 320 }, animStyles[i]]}>
+					       	<ProfileCard userkey={item} />
+					      </Animated.View>
+							);
+						}
+					})
+				}
       </ScrollView>
     );
 
@@ -129,27 +145,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     },
-    ball: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: 'red',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text: {
-        fontWeight: 'bold',
-        color: 'white',
-        fontSize: 32
-    },
     image1: {
-	    marginLeft: 100,
-	    // marginTop: 100,
-	    width: 100,
-	    height: 500,
+	    marginLeft: 30,
+	    marginTop: 10,
+	    width: 320,
+	    height: 600,
 	    resizeMode: 'contain',
-
   	},
+  	profileCard: {
+  		marginTop: 70,
+  		marginLeft: 30,
+  		width: 300,
+  		height: 470,
+  	}
 });
 
 
