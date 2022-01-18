@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/elements';
 
 import Login from '../screens/Login';
-import LandingComponent from '../components/LandingComponent';
+import LandingComponent from '../screens/LandingScreen';
 import Signup from '../screens/Signup';
 
 const Stack = createStackNavigator();
