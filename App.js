@@ -7,8 +7,9 @@ import auth from '@react-native-firebase/auth';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 
-import Home from './src/screens/Home';
-import Landing from './src/screens/Landing';
+// import Home from './src/screens/Home';
+import Home from './src/navigators/HomeNavigator';
+import Landing from './src/navigators/LandingNavigator';
 
 // const SwitchNavigator = createSwitchNavigator(
 //   {

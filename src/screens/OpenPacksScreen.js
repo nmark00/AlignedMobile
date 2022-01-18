@@ -18,7 +18,6 @@ class UserScreen extends Component {
 			likes: [],
 			canScroll: false,
 			packUsers: [],
-			opacity: 1
 		};
 	}
 
@@ -115,12 +114,19 @@ class UserScreen extends Component {
 			});
 		}
 
-    return (
-      <ScrollView style={[styles.container]} horizontal={true} scrollEnabled={this.state.canScroll}>
-        <TouchableOpacity onPress={this.StartAnimation} style={{zIndex: 999}}>
-          	<Image style={{...styles.image1, opacity: this.state.opacity}}
+		let packImg;
+
+		if (this.state.canScroll)
+			packImg = <View style={{width: 320, marginLeft: 30}}></View>
+		else
+			packImg = <TouchableOpacity onPress={this.StartAnimation} style={{zIndex: 999}}>
+          	<Image style={styles.image1}
                 source={require('../../public/images/aquarius-cardback.png')}/>
         </TouchableOpacity>
+
+    return (
+      <ScrollView style={[styles.container]} horizontal={true} scrollEnabled={this.state.canScroll}>
+      	{packImg}
 				{ this.state.packUsers.map((item, i) => {
 						if (item) {
 							return (
