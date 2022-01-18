@@ -68,14 +68,14 @@ export default function HomeNavigator(props) {
               options={{ title: 'Market', headerShown: false }}
             />
             <Tab.Screen 
-              name="HomeScreen" 
-              component={HomeScreen} 
-              options={{ title: 'Account' }}
-            />
-            <Tab.Screen 
               name="Chats" 
               component={Chats} 
               options={{ title: 'Chats' }}
+            />
+            <Tab.Screen 
+              name="HomeScreen" 
+              component={HomeScreen} 
+              options={{ title: 'Account' }}
             />
           </Tab.Navigator> }
     </Stack.Screen>
