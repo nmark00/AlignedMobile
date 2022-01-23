@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Alert, Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
+import { Alert, Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Text } from 'react-native';
 import firebase from '../firebase/firebaseDB'
 import ProfileCard from '../components/ProfileCard'
 import auth from '@react-native-firebase/auth';
+import ChoosePic from '../components/ChoosePicAlt';
 
 class UserDetailScreen extends Component {
 
@@ -14,7 +15,8 @@ class UserDetailScreen extends Component {
       bio: '',
       sPref: '',
       pics: [],
-      uid: ''
+      uid: '',
+      isLoading: true
     };
   }
 
@@ -28,6 +30,7 @@ class UserDetailScreen extends Component {
       pics: this.props.route.params.pics,
       uid: this.props.route.params.userkey
     });
+    this.setState( { isLoading: false });
   }
 
 
@@ -40,6 +43,7 @@ class UserDetailScreen extends Component {
       name: this.state.name,
       bio: this.state.bio,
       gender: this.state.gender,
+      pics: this.state.pics
     }, {merge: true}).then(docRef => {
       this.setState({
         key: '',
@@ -76,6 +80,16 @@ class UserDetailScreen extends Component {
     );
   }
 
+  updatePics(i, url) {
+    let updatedPics = this.state.pics;
+    if (i >= updatedPics.length) {
+      updatedPics.push(url)
+    } else {
+      updatedPics[i] = url
+    }
+    this.setState({pics: updatedPics});
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -87,7 +101,37 @@ class UserDetailScreen extends Component {
     return (
       <ScrollView style={styles.container}>
 
+        <View style={styles.fieldRow}>
+          <View style={{padding: 20}}>
+            <ChoosePic 
+              getImage={url => {this.updatePics(0, url); }}
+              uri={this.state.pics[0]}
+              />
+          </View>
+          <View style={{padding: 20}}>
+            <ChoosePic 
+              getImage={url => {this.updatePics(1, url); }}
+              uri={this.state.pics[1]}
+              />
+          </View>
+          <View style={{padding: 20}}>
+            <ChoosePic 
+              getImage={url => {this.updatePics(2, url); }}
+              uri={this.state.pics[2]}
+              />
+          </View>
+          {/* <ChoosePic */}
+          {/*   getImage={url => {updatePics(1, url); }} */}
+          {/*   uri={this.state.pics[1]} */}
+          {/*   /> */}
+          {/* <ChoosePic */}
+          {/*   getImage={url => {updatePics(2, url); }} */}
+          {/*   uri={this.state.pics[2]} */}
+          {/*   /> */}
+        </View>
+
         <View style={styles.inputGroup}>
+          <Text style={styles.text}>Name: </Text>
           <TextInput
             placeholder={'Name'}
             value={this.state.name}
@@ -95,6 +139,7 @@ class UserDetailScreen extends Component {
           />
         </View>
         <View style={styles.inputGroup}>
+          <Text style={styles.text}>Bio: </Text>
           <TextInput
             multiline={true}
             numberOfLines={4}
@@ -144,6 +189,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: 7, 
+  },
+  fieldRow: {
+        flexDirection: 'row'
+  },
+  text: {
+    fontSize: 18,
+    paddingBottom: 5
   }
 })
 
