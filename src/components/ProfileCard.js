@@ -35,9 +35,9 @@ class ProfileCard extends Component {
           gender: user.gender,
           astro: user.astro,
           pics: user.pics,
-          urls: user.pics
+          urls: user.pics.filter(n=>n)
         });
-        return user.pics
+        return user.pics.filter(n=>n)
       // } else {
       //   console.log("Document does not exist!")
       // }

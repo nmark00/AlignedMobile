@@ -3,6 +3,8 @@ import { Alert, Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, Vi
 import firebase from '../firebase/firebaseDB'
 import ProfileCard from '../components/ProfileCard'
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import uuid from 'react-native-uuid'
 import ChoosePic from '../components/ChoosePicAlt';
 
 class UserDetailScreen extends Component {
@@ -16,7 +18,8 @@ class UserDetailScreen extends Component {
       sPref: '',
       pics: [],
       uid: '',
-      isLoading: true
+      isLoading: true,
+      updated2Pics: new Array(6)
     };
   }
 
@@ -34,23 +37,52 @@ class UserDetailScreen extends Component {
   }
 
 
-  updateUser() {
+  async updateUser() {
     this.setState({
       isLoading: true,
     });
+
+    let updatedPics = this.state.pics;
+    for (let [i, url] of this.state.updated2Pics.entries()) {
+      
+
+      if (url == null) {
+        if (i >= updatedPics.length) {
+          updatedPics.push('');
+        }
+        continue;
+      }
+
+      let ref = storage().ref(`users/${this.state.uid}/${i}`)
+
+      if (url) {
+        await ref.putFile(url);
+        let updatedUrl = await ref.getDownloadURL();
+        if (i >= updatedPics.length)
+          updatedPics.push(updatedUrl)
+        else
+          updatedPics[i] = updatedUrl;
+      } else {
+        await ref.delete();
+        updatedPics[i] = '';
+      }
+    }
+
     const updateDBRef = firebase.firestore().collection('users').doc(this.state.uid);
     updateDBRef.set({
       name: this.state.name,
       bio: this.state.bio,
       gender: this.state.gender,
-      pics: this.state.pics
+      // pics: this.state.pics
+      pics: updatedPics
     }, {merge: true}).then(docRef => {
       this.setState({
         key: '',
         name: '',
         bio: '',
         gender: '',
-        isLoading: false
+        isLoading: false,
+        updated2Pics: new Array(6)
       });
       this.props.navigation.navigate('HomeScreen');
     }).catch(error => {
@@ -61,10 +93,16 @@ class UserDetailScreen extends Component {
 
   deleteUser() {
     auth().signOut();
-    const dbRef = firebase.firestore().collection('users').doc(this.props.route.params.userkey)
-    dbRef.delete().then(res => {
-      console.log('Item removed from database')
-      this.props.navigation.navigate('Landing', {screen: 'LandingComponent'});
+    const uid = this.props.route.params.userkey;
+    const ref = storage().ref(`users/${uid}`)
+    ref.delete()
+    .then(() => {
+      const dbRef = firebase.firestore().collection('users').doc(this.props.route.params.userkey)
+      dbRef.delete()
+      .then(res => {
+        console.log('Item removed from database')
+        this.props.navigation.navigate('Landing', {screen: 'LandingComponent'});
+      })
     })
   }
 
@@ -81,14 +119,31 @@ class UserDetailScreen extends Component {
   }
 
   updatePics(i, url) {
-    let updatedPics = this.state.pics;
-    if (i >= updatedPics.length) {
-      updatedPics.push(url)
-    } else {
-      updatedPics[i] = url
-    }
-    this.setState({pics: updatedPics});
+    let updated2Pics2 = this.state.updated2Pics;
+    updated2Pics2[i] = url;
+    this.setState({ updated2Pics: updated2Pics2 })
   }
+
+//   async updatePics(i, url) {
+//     const uid = auth().currentUser.uid;
+//     let updatedPics = this.state.pics;
+// 
+//     const ref = storage().ref(`users/${uid}/${i}`)
+// 
+//     if (url) {
+//       await ref.putFile(url);
+//       let updatedUrl = await ref.getDownloadURL();
+//     } else {
+//       await ref.delete();
+//     }
+// 
+//     if (i >= updatedPics.length) {
+//       updatedPics.push(url)
+//     } else {
+//       updatedPics[i] = url
+//     }
+//     this.setState({pics: updatedPics});
+//   }
 
   render() {
     if (this.state.isLoading) {
@@ -120,14 +175,6 @@ class UserDetailScreen extends Component {
               uri={this.state.pics[2]}
               />
           </View>
-          {/* <ChoosePic */}
-          {/*   getImage={url => {updatePics(1, url); }} */}
-          {/*   uri={this.state.pics[1]} */}
-          {/*   /> */}
-          {/* <ChoosePic */}
-          {/*   getImage={url => {updatePics(2, url); }} */}
-          {/*   uri={this.state.pics[2]} */}
-          {/*   /> */}
         </View>
 
         <View style={styles.inputGroup}>
@@ -157,7 +204,7 @@ class UserDetailScreen extends Component {
         </View>
         <View style={styles.button}>
           <Button
-            title="Delete"
+            title="Delete Profile"
             onPress={this.openTwoButtonAlert}
             color="#E37399"
           />

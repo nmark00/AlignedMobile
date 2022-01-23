@@ -27,8 +27,8 @@ export default function SignupName(props) {
 
     let ref;
     let url;
-    for (const uri of pics.filter(n=>n)) {
-      ref = storage().ref(`users/${uid}/${uuid.v4()}`);
+    for (const [i, uri] of pics.entries()) {
+      ref = storage().ref(`users/${uid}/${i}`);
       await ref.putFile(uri);
       url = await ref.getDownloadURL();
       params.pics.push(url)
