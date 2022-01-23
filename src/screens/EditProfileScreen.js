@@ -177,6 +177,27 @@ class UserDetailScreen extends Component {
           </View>
         </View>
 
+        <View style={styles.fieldRow}>
+          <View style={{padding: 20}}>
+            <ChoosePic 
+              getImage={url => {this.updatePics(3, url); }}
+              uri={this.state.pics[3]}
+              />
+          </View>
+          <View style={{padding: 20}}>
+            <ChoosePic 
+              getImage={url => {this.updatePics(4, url); }}
+              uri={this.state.pics[4]}
+              />
+          </View>
+          <View style={{padding: 20}}>
+            <ChoosePic 
+              getImage={url => {this.updatePics(5, url); }}
+              uri={this.state.pics[5]}
+              />
+          </View>
+        </View>
+
         <View style={styles.inputGroup}>
           <Text style={styles.text}>Name: </Text>
           <TextInput
