@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, ScrollView, ActivityIndicator, View } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements'
 import firebase from '../firebase/firebaseDB'
+import auth from '@react-native-firebase/auth';
 
 class Chats extends Component {
 
@@ -10,28 +11,33 @@ class Chats extends Component {
 		this.firestoreRef = firebase.firestore().collection('users');
 		this.state = {
 			isLoading: true,
-			userArr: []
+			userArr: [], //key and name of matches
+			matches: [], //uid of matches
+			chats: [], //uid of the chats
 		};
-	}
 
-	getCollection = (querySnapshot) => {
-		const userArr = [];
-		querySnapshot.forEach(res => {
-			const {name, bio, gender, astro} = res.data();
-			userArr.push({
-				key: res.id,
-				res,
-				name,
-				gender,
-				astro,
-				bio,
-			});
-		});
-		this.setState({ userArr, isLoading: false});
 	}
 
 	componentDidMount() {
-		this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
+		const uid = auth().currentUser.uid;
+    this.unsubscribe = this.firestoreRef.doc(uid)
+    .onSnapshot(res => {
+      const user = res.data();
+      this.setState({matches: user.matches})
+
+      this.firestoreRef
+      .where(firebase.firestore.FieldPath.documentId(), 'in', user.matches)
+      .onSnapshot(querySnapshot => {
+      	const userArr = [];
+      	const chats = [];
+      	querySnapshot.forEach(res => {
+      		chats.push([res.id, uid].sort().join(''))
+      		userArr.push({ key: res.id, name: res.data().name })
+      	});
+      	this.setState({ userArr, isLoading: false, chats: chats })
+      	console.log(chats)
+      });
+    });
 	}
 
 	componentWillUnmount() {

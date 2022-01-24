@@ -6,9 +6,6 @@ import auth from '@react-native-firebase/auth';
 
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-LogBox.ignoreLogs(['EventEmitter.removeListener',
-  'Attempted to remove more RCTKeyboardObserver listeners than added'])
-
 
 // import Home from './src/screens/Home';
 import Home from './src/navigators/HomeNavigator';

@@ -102,6 +102,7 @@ class Chat extends Component {
         marginLeft: 15,
         marginRight: 15,
         marginBottom: 5,
+        marginTop: 5,
         borderWidth: 0.5,
         borderColor: 'grey',
         borderRadius: 20,
@@ -156,7 +157,7 @@ class Chat extends Component {
     );
   }
   componentWillUnmount() {
-    // this.ref.off();
+    this.ref.off();
   }
 }
 
