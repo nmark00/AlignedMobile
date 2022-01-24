@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, FlatList,Alert } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/elements';
@@ -7,7 +6,8 @@ import { HeaderBackButton } from '@react-navigation/elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import HomeScreen from '../screens/HomeScreen';
-import Chats from '../screens/Chats';
+// import ChatNavigator from '../screens/ChatNavigator';
+import ChatNavigator from './ChatNavigator';
 import EditProfile from '../screens/EditProfileScreen';
 import MarketplaceNavigator from './MarketNavigator'
 import Stats from '../screens/StatsScreen';
@@ -33,7 +33,7 @@ export default function HomeNavigator(props) {
       
                   if (route.name === 'HomeScreen') {
                     iconName = 'user';
-                  } else if (route.name === 'Chats') {
+                  } else if (route.name === 'ChatNavigator') {
                     iconName = 'comments';
                   } else if (route.name === 'EditProfile') {
                     iconName = 'user';
@@ -68,14 +68,14 @@ export default function HomeNavigator(props) {
               options={{ title: 'Market', headerShown: false }}
             />
             <Tab.Screen 
-              name="Chats" 
-              component={Chats} 
-              options={{ title: 'Chats' }}
+              name="ChatNavigator" 
+              component={ChatNavigator} 
+              options={{ title: 'Chats', lazy: false }}
             />
             <Tab.Screen 
               name="HomeScreen" 
               component={HomeScreen} 
-              options={{ title: 'Account' }}
+              options={{ title: 'Account', lazy: false }}
             />
           </Tab.Navigator> }
     </Stack.Screen>

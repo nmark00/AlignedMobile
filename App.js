@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { View } from 'react-native'
+import { View, LogBox } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
 
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+
+LogBox.ignoreLogs(['EventEmitter.removeListener',
+  'Attempted to remove more RCTKeyboardObserver listeners than added'])
 
 
 // import Home from './src/screens/Home';

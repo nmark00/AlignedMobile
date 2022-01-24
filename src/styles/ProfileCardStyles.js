@@ -63,9 +63,11 @@ export default styles = {
     height: 300
   },
   loadingWheel: {
-    color: "#9E9E9E",
-    height: 80,
-    width: 80,
+    color: "#AEAEAE",
+    height: 180,
+    width: 180,
+    marginLeft: 68,
+    marginTop: 60
   },
   fieldRow: {
     flexDirection: 'row'

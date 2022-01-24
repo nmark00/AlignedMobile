@@ -124,26 +124,6 @@ class UserDetailScreen extends Component {
     this.setState({ updated2Pics: updated2Pics2 })
   }
 
-//   async updatePics(i, url) {
-//     const uid = auth().currentUser.uid;
-//     let updatedPics = this.state.pics;
-// 
-//     const ref = storage().ref(`users/${uid}/${i}`)
-// 
-//     if (url) {
-//       await ref.putFile(url);
-//       let updatedUrl = await ref.getDownloadURL();
-//     } else {
-//       await ref.delete();
-//     }
-// 
-//     if (i >= updatedPics.length) {
-//       updatedPics.push(url)
-//     } else {
-//       updatedPics[i] = url
-//     }
-//     this.setState({pics: updatedPics});
-//   }
 
   render() {
     if (this.state.isLoading) {
@@ -156,6 +136,7 @@ class UserDetailScreen extends Component {
     return (
       <ScrollView style={styles.container}>
 
+      {/* 1st ROW OF PICTURES */}
         <View style={styles.fieldRow}>
           <View style={{padding: 20}}>
             <ChoosePic 
@@ -177,6 +158,7 @@ class UserDetailScreen extends Component {
           </View>
         </View>
 
+      {/* 2nd ROW OF PICTURES */}
         <View style={styles.fieldRow}>
           <View style={{padding: 20}}>
             <ChoosePic 
@@ -198,6 +180,7 @@ class UserDetailScreen extends Component {
           </View>
         </View>
 
+        {/* EDIT TEXT FIELDS */}
         <View style={styles.inputGroup}>
           <Text style={styles.text}>Name: </Text>
           <TextInput

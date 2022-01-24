@@ -34,7 +34,6 @@ class ProfileCard extends Component {
           bio: user.bio,
           gender: user.gender,
           astro: user.astro,
-          pics: user.pics,
           urls: user.pics.filter(n=>n)
         });
         return user.pics.filter(n=>n)
@@ -67,7 +66,7 @@ class ProfileCard extends Component {
           <View style={styles.card}>
             <View style={styles.fieldRow}>
               {this.state.isLoading ? 
-                (<ActivityIndicator style={styles.loadingWheel}/>) : null
+                (<ActivityIndicator size="large" style={styles.loadingWheel}/>) : null
               }
               <Image style={styles.image1} 
                 source={{uri: this.state.urls[this.state.picIndex]}}

@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/elements';
 
 import Login from '../screens/Login';
-import LandingComponent from '../screens/LandingScreen';
+import LandingScreen from '../screens/LandingScreen';
 import Signup from '../navigators/SignupNavigator';
 
 const Stack = createStackNavigator();
@@ -14,12 +14,12 @@ const Stack = createStackNavigator();
 export default function Landing() {
   return (
     <Stack.Navigator
-      initialRouteName="LandingComponent"
+      initialRouteName="LandingScreen"
       screenOptions={{gestureEnabled: false}}
     >
       <Stack.Screen
-        name="LandingComponent"
-        component={LandingComponent}
+        name="LandingScreen"
+        component={LandingScreen}
         options={{headerLeft: props => null }}
       />
       <Stack.Screen
