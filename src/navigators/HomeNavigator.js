@@ -93,7 +93,8 @@ export default function HomeNavigator(props) {
                       ),
                       headerBackTitle: "Back",
                       headerShown: true,
-
+                      title: 'Edit My Profile',
+                      lazy: false
                     })
               }
     />
