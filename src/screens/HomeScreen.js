@@ -71,7 +71,7 @@ class UserScreen extends Component {
 					this.state.user.matches.map((item, i) => {
 						if (item) {
 							return (
-							<ListItem key={i} >
+							<ListItem key={i} containerStyle={{backgroundColor: 'transparent'}}>
 								<ProfileCard userkey={item}/>
 							</ListItem>
 							);
@@ -89,7 +89,7 @@ class UserScreen extends Component {
 						this.state.user.likes.map((item, i) => {
 							if (item) {
 								return (
-									<ListItem key={i} >
+									<ListItem key={i} containerStyle={{backgroundColor: 'transparent'}}>
 										<ProfileCard userkey={item}/>
 									</ListItem>
 
