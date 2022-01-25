@@ -9,12 +9,12 @@ class Chat extends Component {
     super(props);
     this.state = {
       user: {
-        _id: this.props.route.params.userkey
+        _id: this.props.route.params.uid
       },
       isLoadingEarlier: false,
       messages: []
     }
-    this.ref = firebase.database().ref('Messages');
+    this.ref = firebase.database().ref(`Messages/${this.props.route.params.userkey}`);
   }
 
   onLoadEarlier = () => {
