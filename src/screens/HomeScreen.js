@@ -16,7 +16,7 @@ class UserScreen extends Component {
 		};
 	}
 
-	signout() {
+	signout = () => {
     auth().signOut();
     this.props.navigation.navigate('Landing', {screen: 'LandingComponent'})
   }

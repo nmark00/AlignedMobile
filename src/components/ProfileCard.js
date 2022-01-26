@@ -41,7 +41,9 @@ class ProfileCard extends Component {
       //   console.log("Document does not exist!")
       // }
     }, () => console.log("Document does not exist!")).then(pics => {
-      this.state.urls.forEach((u, i) => Image.prefetch(pics[i]))
+      this.state.urls.forEach((u, i) => Image.prefetch(pics[i]));
+      // const imgs = this.state.urls.forEach((u, i) => Image.prefetch(pics[i]));
+      // Promise.all(imgs).catch((err)=>{console.error("preftech failed", err);})
     });
   }
 

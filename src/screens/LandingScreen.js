@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, Button, View } from 'react-native';
+import { StyleSheet, ScrollView, Button, View, StatusBar } from 'react-native';
 
 class LandingScreen extends Component {
 
@@ -13,7 +13,7 @@ class LandingScreen extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-
+      <StatusBar barStyle={'dark-content'}/>
           <Button
             title="Log in with phone number"
             onPress={ ()=>{this.props.navigation.navigate('Login');} }

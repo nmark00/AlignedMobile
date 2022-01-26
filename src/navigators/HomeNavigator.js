@@ -6,7 +6,6 @@ import { HeaderBackButton } from '@react-navigation/elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import HomeScreen from '../screens/HomeScreen';
-// import ChatNavigator from '../screens/ChatNavigator';
 import ChatNavigator from './ChatNavigator';
 import EditProfile from '../screens/EditProfileScreen';
 import MarketplaceNavigator from './MarketNavigator'
@@ -88,7 +87,7 @@ export default function HomeNavigator(props) {
                         <HeaderBackButton 
                           {...props}
                           onPress={()=> {
-                            navigation.navigate('Tab')
+                            navigation.goBack()
                           }}/>
                       ),
                       headerBackTitle: "Back",
