@@ -135,6 +135,7 @@ class Chat extends Component {
           renderInputToolbar={this.inputToolbar}
           renderSend={this.renderSend}
           renderAvatar={null}
+          isTyping={true}
 //           listViewProps={{
 //             scrollEventThrottle: 400,
 //             onScroll: ({ nativeEvent }) => {

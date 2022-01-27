@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, Animated, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, StyleSheet, ScrollView, View, Text, Image, TouchableOpacity, Animated, useWindowDimensions } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements'
 import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
 import firebase from '../firebase/firebaseDB';
+import { Geocoding } from '../firebase/crud';
+import GeoFirestore from '../firebase/geofirestoreDB';
+const geofire = require('geofire-common');
 
 const LIMIT = 8;
 
@@ -16,8 +19,12 @@ class UserScreen extends Component {
 			animation: new Animated.Value(0),
 			matches: [],
 			likes: [],
+			lat: 0,
+			lng: 0,
 			canScroll: false,
 			packUsers: [],
+			picDidLoad: false
+
 		};
 	}
 
@@ -31,18 +38,84 @@ class UserScreen extends Component {
 		}).start()
 	}
 
-	GetUsers = (forbiddenUsers) => {
-		// console.log(forbiddenUsers)
-		firebase.firestore().collection('users')
-		.where(firebase.firestore.FieldPath.documentId(), 'not-in', forbiddenUsers)
-		.limit(LIMIT)
+	GetUsers = (forbiddenUsers, matchingDocs) => {
+		console.log("GetUsers")
+		return firebase.firestore().collection('users')
+		.where(firebase.firestore.FieldPath.documentId(), 'in', matchingDocs)
+		// .where(firebase.firestore.FieldPath.documentId(), 'not-in', forbiddenUsers)
+		.limit(LIMIT + forbiddenUsers.length)
 		.get()
 		.then(querySnapshot => {
-			console.log(querySnapshot.docs.map(a => a.id))
-			this.setState({packUsers: querySnapshot.docs.map(a => a.id)})
-			return querySnapshot.docs.map(a => a.id);
+			const potentials = querySnapshot.docs.map(a => a.id);
+			const eligibles = potentials.filter(uid => !forbiddenUsers.includes(uid));
+			const packUsers = eligibles.sort(() => .5 - Math.random()).slice(0, LIMIT);
+
+			console.log("packusers: ",packUsers);
+			return packUsers;
 		});
 	}
+	queryHashes = (userLat, userLng) => {
+
+		console.log("queryHashes")
+
+		const center = [userLat, userLng];
+		const radiusInM = 25 * 1600;
+
+		const bounds = geofire.geohashQueryBounds(center, radiusInM);
+		const promises = [];
+		for (const b of bounds) {
+		  const q = firebase.firestore().collection('users')
+		    .orderBy('geohash')
+		    .startAt(b[0])
+		    .endAt(b[1]);
+
+		  promises.push(q.get());
+		}
+
+		// Collect all the query results together into a single list
+		return Promise.all(promises).then((snapshots) => {
+		  const matchingDocs = [];
+
+		  for (const snap of snapshots) {
+		    for (const doc of snap.docs) {
+		      const lat = doc.get('lat');
+		      const lng = doc.get('lng');
+
+		      // We have to filter out a few false positives due to GeoHash
+		      // accuracy, but most will match
+		      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+		      const distanceInM = distanceInKm * 1600;
+		      if (distanceInM <= radiusInM) {
+		        matchingDocs.push(doc.id);
+		      }
+		    }
+		  }
+
+		  return matchingDocs;
+		});
+	}
+
+
+// vv THESE FUNCTIONS CREATE FAKE USERS IN FIREBASE vv
+	AddGeo = () => {
+		firebase.firestore().collection('users')
+		.get()
+		.then(snap => {
+			snap.forEach(doc => {
+				let lat = Math.random() * 1 + 34;
+				let lng = Math.random() * 1 - 119;
+				let hash = geofire.geohashForLocation([lat, lng]);
+				doc.ref.update({
+					geohash: hash,
+					lat: lat,
+					lng: lng
+					// d: {coordinates: new firebase.firestore.GeoPoint(lat, lng), name: 'Geofirestore'},
+					// coordinates: new firebase.firestore.GeoPoint(lat, lng)
+				})
+			})
+		})
+	}
+
 
 	CreateUsers = async (packSize) => {
 		const genders = ['male', 'female']
@@ -82,27 +155,36 @@ class UserScreen extends Component {
 			}
 		});
 	}
+// ^^ THESE FUNCTIONS CREATE FAKE USERS IN FIREBASE ^^
 
 	componentDidMount() {
-		// this.CreateUsers(10)
 		const uid = auth().currentUser.uid;
 		const ref = firebase.firestore().collection('users').doc(uid);
-		ref.get().then(res => {
-			if (res.exists) {
-				const user = res.data();
-				const packUsers = this.GetUsers(user.matches.concat(user.likes, [uid]))
-				this.setState({
-					matches: user.matches,
-					likes: user.likes,
-				});
-			} else {
-				console.log("Document does not exist!");
-			}
-		});
+		ref.get()
+		.then(res => {
+			const user = res.data();
+			this.setState({
+				matches: user.matches,
+				likes: user.likes,
+				lat: user.lat,
+				lng: user.lng
+			});
+			return [user.lat, user.lng];
+		})
+		.then((coords) => {
+			return this.queryHashes(coords[0],coords[1]);
+		})
+		.then((matchingDocs) => {
+			const forbiddenUsers = this.state.matches.concat(this.state.likes, [uid]);
+			const packUsers = this.GetUsers(forbiddenUsers, matchingDocs);
+			return packUsers
+		})
+		.then(packUsers => this.setState({packUsers: packUsers}))
 	}
 
 
 	render() {
+		// console.log(Geocoding("Los Angeles"))
 		const animStyles = []
 		for (var i = 0; i < LIMIT; i++) {
 			const xVal = this.state.animation.interpolate({
@@ -120,19 +202,23 @@ class UserScreen extends Component {
 			packImg = <View style={{width: 320, marginLeft: 30}}></View>
 		else
 			packImg = <TouchableOpacity onPress={this.StartAnimation} style={{zIndex: 999}}>
+					{!this.state.picDidLoad ? (<View style={styles.preloader}>
+	                    <ActivityIndicator size="large" color="#9E9E9E"/>
+	                </View>) : null}
           	<Image style={styles.image1}
-                source={require('../../public/images/aquarius-cardback.png')}/>
+                source={require('../../public/images/aquarius-cardback.png')}
+                onLoad={()=>{this.setState({picDidLoad: true})}}/>
         </TouchableOpacity>
 
     return (
       <ScrollView style={[styles.container]} horizontal={true} scrollEnabled={this.state.canScroll}>
       	{packImg}
 				{ this.state.packUsers.map((item, i) => {
-						if (item) {
+						if (item && this.state.picDidLoad) {
 							return (
 								<Animated.View key={i} style={[{ marginTop: 40, height: 470, width: 320 }, animStyles[i]]}>
-					       	<ProfileCard userkey={item} />
-					      </Animated.View>
+							       	<ProfileCard userkey={item} />
+							      </Animated.View>
 							);
 						}
 					})
@@ -161,6 +247,9 @@ const styles = StyleSheet.create({
   		marginLeft: 30,
   		width: 300,
   		height: 470,
+  	},
+  	preloader: {
+  		marginTop: 300
   	}
 });
 

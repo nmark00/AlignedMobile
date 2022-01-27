@@ -20,6 +20,8 @@
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/stack": "^6.0.11",
     "firebase": "^8.2.3",
+    "geofire-common": "^5.2.0",
+    "geofirestore": "^4.4.2",
     "native-base": "^3.2.2",
     "react": "17.0.2",
     "react-native": "0.66.4",
