@@ -72,3 +72,7 @@ export async function CreateUsers(packSize) {
 }
 
 // ^^ THESE FUNCTIONS CREATE FAKE USERS IN FIREBASE ^^
+
+export function UpdateUser() {
+	
+}

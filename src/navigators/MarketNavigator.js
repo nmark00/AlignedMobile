@@ -8,6 +8,8 @@ import MarketplaceScreen from '../screens/MarketplaceScreen';
 import OpenPacksScreen from '../screens/OpenPacksScreen';
 import PacksStore from '../screens/PacksStore';
 import Auction from '../screens/Auction';
+import AuctionSell from '../screens/AuctionSellScreen';
+import AuctionBuy from '../screens/AuctionBuyScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +35,14 @@ export default function MarketNavigator() {
       <Stack.Screen
         name="Auction"
         component={Auction}
+      />
+      <Stack.Screen
+        name="AuctionBuy"
+        component={AuctionBuy}
+      />
+      <Stack.Screen
+        name="AuctionSell"
+        component={AuctionSell}
       />
       <Stack.Screen
         name="MarketplaceScreen"
