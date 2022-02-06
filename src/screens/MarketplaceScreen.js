@@ -86,7 +86,7 @@ export default function Marketplace(props) {
       {/* Auction Box */}
       <View style={styles.box}>
         <Text style={styles.title}>Auction</Text>
-        <View style={styles.fieldRow}>
+        <View style={{...styles.fieldRow, marginTop: 10}}>
           <ButtonBox 
           width={150}
           height={50}
